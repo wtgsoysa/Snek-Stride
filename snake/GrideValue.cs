@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace snake
+﻿namespace snake
 {
-    internal class GrideValue
+    public enum GrideValue
     {
-    }
+        Empty,
+        Snake,
+        Food,
+        Outside
+        
 }
