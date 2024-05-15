@@ -18,6 +18,7 @@ Snek-Stride is a classic snake game developed using C# and WPF application.
 5. Eat food to grow the snake and avoid collisions with walls and the snake itself.
 
 ## Screenshots
+![Screenshot 2024-05-15 120155](https://github.com/wtgsoysa/Snek-Stride/assets/134461253/c922b0fc-5d58-479c-995e-84dd81887522
 
 
 
