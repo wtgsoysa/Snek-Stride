@@ -16,6 +16,16 @@ namespace snake
             {GrideValue.Food,Images.Food},
         };
 
+        private readonly Dictionary<Direction, int> dirToRotation = new()
+        {
+            {Direction.Up, 0},
+            {Direction.Right, 90},
+            {Direction.Down, 180 },
+            {Direction.Left,270 }
+
+        };
+
+
         private readonly int rows = 15, cols = 15;
         private readonly Image[,] gridImage;
         private GameState gameState;
@@ -113,6 +123,7 @@ namespace snake
         private void Draw()
         {
             DrawGrid();
+            DrawSnakeHead();
             ScoreText.Text = $"SCORE {gameState.Score}";
         }
 
@@ -128,15 +139,28 @@ namespace snake
             }
         }
 
+        private void DrawSnakeHead()
+        {
+            Position headPos = gameState.HeadPostion();
+            Image image = gridImage[headPos.Row, headPos.Col];
+            image.Source = Images.Head;
+
+        }
+
 
         private async Task ShowCountDown()
         {
-            for(int i = 0; i > 1; i--)
+            for (int i = 0; i > 1; i--)
             {
                 OverlayText.Text = i.ToString();
                 await Task.Delay(500);
             }
         }
+
+
+
+
+
 
         private async Task showGameOver()
         {
