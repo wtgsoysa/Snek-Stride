@@ -20,6 +20,10 @@ Snek-Stride is a classic snake game developed using C# and WPF application.
 ## Screenshots
 ![Screenshot 2024-05-15 120155](https://github.com/wtgsoysa/Snek-Stride/assets/134461253/bad42661-0bce-41d1-8e17-016024a6ede5)
 
+![Screenshot 2024-05-15 120215](https://github.com/wtgsoysa/Snek-Stride/assets/134461253/da47fddb-7833-4c41-87a3-0825979b5afd)
+
+
+
 
 
 
