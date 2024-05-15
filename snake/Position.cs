@@ -1,5 +1,4 @@
-﻿
-namespace snake
+﻿namespace snake
 {
     public class Position
     {

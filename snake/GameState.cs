@@ -11,13 +11,13 @@ namespace snake
     {
         public int Rows { get; }
         public int Cols { get; }
-        public GrideValue[,] GrideValues { get; }
-
+        public GrideValue[,] Grid { get; }
+        public Direction Dir { get; private set; }
+        public int Score { get; private set; }
         public bool GameOver { get; private set; }
 
-        public int Score { get; private set; }
-        public Direction Dir { get; private set; }
-
+       
+        private readonly LinkedList<Direction> dirChanges = new LinkedList<Direction>();
         private readonly LinkedList<Position> snakePosition = new LinkedList<Position>();   
         private readonly Random random = new Random();
 
@@ -25,7 +25,7 @@ namespace snake
         {
             Rows = rows;
             Cols = cols;
-            GrideValues = new GrideValue[rows, cols];
+            Grid = new GrideValue[rows, cols];
             Dir = Direction.Right;
 
 
@@ -38,13 +38,13 @@ namespace snake
         private void AddSnake()
         {
             int r = Rows / 2;
-            for (int c = 1; c<= Cols; c++)
+            for (int c = 0; c < 3; c++)
             {
-                GrideValues[r, c] = GrideValue.Snake;
+                Grid[r, c] = GrideValue.Snake;
                 snakePosition.AddFirst(new Position(r, c));
             }
-
         }
+
 
         private IEnumerable<Position> EmptyPositions()
         {
@@ -52,7 +52,7 @@ namespace snake
             {
                 for(int c=0; c< Cols; c++)
                 {
-                    if (GrideValues[r,c] == GrideValue.Empty)
+                    if (Grid[r,c] == GrideValue.Empty)
                     {
                         yield return new Position(r, c);
                     }
@@ -70,7 +70,7 @@ namespace snake
             }
 
             Position pos = empty[random.Next(empty.Count)];
-            GrideValues[pos.Row, pos.Col] = GrideValue.Food;
+            Grid[pos.Row, pos.Col] = GrideValue.Food;
         }
 
         public Position HeadPostion()
@@ -91,20 +91,45 @@ namespace snake
         public void AddHead(Position pos)
         {
             snakePosition.AddFirst(pos);
-            GrideValues[pos.Row, pos.Col] = GrideValue.Snake;
+            Grid[pos.Row, pos.Col] = GrideValue.Snake;
             
         }
 
         private void RemoveTail()
         {
             Position tail = snakePosition.Last.Value;
-            GrideValues[tail.Row, tail.Col] = GrideValue.Empty;
+            Grid[tail.Row, tail.Col] = GrideValue.Empty;
             snakePosition.RemoveLast();
+        }
+
+        private Direction GetLastDirection()
+        {
+            if(dirChanges.Count == 0)
+            {
+                return Dir;
+            }
+
+            return dirChanges.Last.Value;
+        }
+
+        private bool CanChangeDirection(Direction newDir)
+        {
+            if(dirChanges.Count == 2)
+            {
+                return false;
+            }
+
+            Direction lastDir = GetLastDirection();
+            return newDir != lastDir && newDir != lastDir.Opposite();
+
         }
 
         public void ChangeDirection(Direction dir)
         {
-            Dir = dir;
+            if (CanChangeDirection(dir))
+            {
+                dirChanges.AddLast(dir);
+            }
         }
 
         private bool OutsideGrid(Position pos)
@@ -124,11 +149,17 @@ namespace snake
                 return GrideValue.Empty;
             }
 
-            return GrideValues [newHeadPos.Row, newHeadPos.Col];
+            return Grid [newHeadPos.Row, newHeadPos.Col];
         }
 
         public void Move()
         {
+            if(dirChanges.Count > 0)
+            {
+                Dir = dirChanges.Last.Value;
+                dirChanges.RemoveFirst();
+            }
+
             Position newHeadPos = HeadPostion().Translate(Dir);
             GrideValue hit = WillHit(newHeadPos);
 

@@ -6,5 +6,7 @@
         Snake,
         Food,
         Outside
-        
+
+    }
+
 }

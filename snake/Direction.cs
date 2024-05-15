@@ -1,6 +1,4 @@
-﻿
-
-namespace snake
+﻿namespace snake
 {
     public class Direction
     {
